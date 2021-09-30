@@ -17,30 +17,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.*;
+import com.example.demo.dto.EmployeeSalaryHistoryResponse;
+import com.example.demo.EmployeeService;
 
 @RestController
 public class EmployeeController {
-	 private final EmployeeService employeeService;
-
-	    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
+	
+	 	@Autowired
+		private final EmployeeService employeeService;
+	    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository, SalaryRepository salaryrepository) {
 	        this.employeeService = employeeService;
 	    }
+	    
+	    
 	    @RequestMapping("/greeting")
 		public String Hello() {
 			return "Hi Everyone #";
 		}
-	    
-	    @PostMapping(value = "/employee")
-	    public ResponseEntity<Object> Post(@RequestBody Employee params) {
-	        try {
-	            Employee result = employeeService.Post(params);
-	            return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK, result);
-	        } catch (Exception e) {
-	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
-	        }
-
-	    }
 	    
 	    
 	    @GetMapping(value = "/employee")
@@ -49,29 +42,67 @@ public class EmployeeController {
 	            List<Employee> result = employeeService.Get();
 	            return ResponseHandler.generateResponse("Successfully retrieved data!", HttpStatus.OK, result);
 	        } catch (Exception e) {
-	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
 	        }
 	    }
-
+	    
+	    @GetMapping(value = "/salaryhistory")
+	    public ResponseEntity<Object> GetSh() {
+	        try {
+	            List<SalaryHistory> result = employeeService.Getsh();
+	            return ResponseHandler.generateResponse("Salary History displayed", HttpStatus.OK, result);
+	        } catch (Exception e) {
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+	        }
+	    }
+	    
 	    
 	    @GetMapping(value = "/employee/{id}")
 	    public ResponseEntity<Object> Get(@PathVariable int id) {
-	        try {
+	    	try{
 	            Employee result = employeeService.Get(id);
 	            return ResponseHandler.generateResponse("Successfully retrieved data!", HttpStatus.OK, result);
-	        } catch (Exception e) {
-	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
-	        }
+	        } catch (Exception e)  {
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+			} 
+	        /*
+				 * else { return ResponseHandler.generateResponse(e.getMessage(),
+				 * HttpStatus.MULTI_STATUS, null);
+				 * 
+				 * }
+				 */
 	    }
-
 	    
+	    @PostMapping(value = "/employee")
+	    public ResponseEntity<Object> Post(@RequestBody Employee params) {
+	        try {
+	            Employee result = employeeService.Post(params);
+	            return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK, result);
+	        } catch (Exception e) {
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+	        }
+
+	    }
+	    
+	    
+	   
 	    @PutMapping(value = "/employee/{id}")
 	    public ResponseEntity<Object> Update(@PathVariable int id, @RequestBody Employee params) {
 	        try {
 	            Employee result = employeeService.Update(params, id);
 	            return ResponseHandler.generateResponse("Updated", HttpStatus.OK, result);
 	        } catch (Exception e) {
-	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
+	        }
+	    }
+	    
+	    @PutMapping(value = "/SalaryUpdate/{id}")
+	    public ResponseEntity<Object> UpdateSalary(@PathVariable long id, @RequestBody SalaryHistory params) {
+	        try {
+	            SalaryHistory result = employeeService.UpdateSalary(params, id);
+	            return ResponseHandler.generateResponse("Updated", HttpStatus.OK, result);
+	        } catch (Exception e) {
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
 	        }
 	    }
 
@@ -82,12 +113,13 @@ public class EmployeeController {
 	            String result = employeeService.Delete(id);
 	            return ResponseHandler.generateResponse("Deleted!", HttpStatus.OK, result);
 	        } catch (Exception e) {
-	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+	            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.NOT_FOUND, null);
 	        }
 	    }
 
 	}
-	
+	//  select code,salary  from  employee,employee salary where employee.code and employeeSalary.salary
+
 	
 	
 	

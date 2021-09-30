@@ -2,12 +2,17 @@ package com.example.demo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,8 +26,7 @@ public class Employee implements Serializable {
 	private long id;
 	@Column(name = "name")
 	private String name;
-	@Column(name = "salary")
-	private Integer salary;
+
 	@Column(name = "experience")
 	private int experience;
 	@Column(name = "address")
@@ -42,18 +46,25 @@ public class Employee implements Serializable {
 	@Column(name = "DOJ")
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private Date dateOfJoin;
+	
+	  @OneToOne(targetEntity=EmployeeSalary.class,cascade=CascadeType.ALL)
+	  @JoinColumn(name="ES_fk",referencedColumnName="id")
+	  private List <EmployeeSalary> Employeesalary;
+	 
+
+	@OneToMany(targetEntity = SalaryHistory.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "ESH_fk", referencedColumnName = "id")
+	private List<SalaryHistory> SalaryHistory;
 
 	public Employee() {
 
 	}
 
-public Employee(long id, String name, Integer salary, int experience, String address, long phone_number,
-			String nationality, String martial_status, String education, String blood_group, String code,
-			Date dateOfJoin) {
+	public Employee(long id, String name, int experience, String address, long phone_number, String nationality,
+			String martial_status, String education, String blood_group, String code, Date dateOfJoin) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.salary = salary;
 		this.experience = experience;
 		this.address = address;
 		this.phoneNumber = phone_number;
@@ -64,7 +75,7 @@ public Employee(long id, String name, Integer salary, int experience, String add
 		this.code = code;
 		this.dateOfJoin = dateOfJoin;
 
-}
+	}
 
 	public long getId() {
 		return id;
@@ -82,13 +93,11 @@ public Employee(long id, String name, Integer salary, int experience, String add
 		this.name = name;
 	}
 
-	public Integer getSalary() {
-		return salary;
-	}
-
-	public void setSalary(Integer salary) {
-		this.salary = salary;
-	}
+	/*
+	 * public Integer getSalary() { return salary; }
+	 * 
+	 * public void setSalary(Integer salary) { this.salary = salary; }
+	 */
 
 	public int getExperience() {
 		return experience;

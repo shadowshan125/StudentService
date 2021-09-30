@@ -1,14 +1,16 @@
 package com.example.demo;
 
-import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-//import org.springframework.data.repository.CrudRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+import com.example.demo.Doa.EmployeeDoa;
+@Service
+public class EmployeeRepository  {
 
-	@Query("select ln from Employee ln where ln.name like %:name% ")
-	public List<Employee> getNames(String name);
+	@Autowired
+	private EmployeeDoa empDoa;
+
+	
 
 }
