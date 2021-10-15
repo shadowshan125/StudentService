@@ -1,28 +1,39 @@
-package com.example.demo;
+package com.example.demo.Definitions;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "employee")
+@Valid
 public class Employee implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2050173409084711159L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private long empId;
+
 	@Column(name = "name")
 	private String name;
-	@Column(name = "salary")
-	private Integer salary;
 	@Column(name = "experience")
 	private int experience;
 	@Column(name = "address")
@@ -37,23 +48,23 @@ public class Employee implements Serializable {
 	private String education;
 	@Column(name = "blood_group")
 	private String bloodGroup;
-	@Column(name = "code")
-	private String code;
 	@Column(name = "DOJ")
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private Date dateOfJoin;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "salary", referencedColumnName = "id", nullable = true)
+	private Salary salary;
 
 	public Employee() {
 
 	}
 
-public Employee(long id, String name, Integer salary, int experience, String address, long phone_number,
-			String nationality, String martial_status, String education, String blood_group, String code,
-			Date dateOfJoin) {
+	public Employee(String name, int experience, String address, long phone_number, String nationality,
+			String martial_status, String education, String blood_group, long empId, Date dateOfJoin) {
 		super();
-		this.id = id;
+		this.empId = empId;
 		this.name = name;
-		this.salary = salary;
 		this.experience = experience;
 		this.address = address;
 		this.phoneNumber = phone_number;
@@ -61,17 +72,16 @@ public Employee(long id, String name, Integer salary, int experience, String add
 		this.martialStatus = martial_status;
 		this.education = education;
 		this.bloodGroup = blood_group;
-		this.code = code;
 		this.dateOfJoin = dateOfJoin;
 
-}
-
-	public long getId() {
-		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public long getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(long empId) {
+		this.empId = empId;
 	}
 
 	public String getName() {
@@ -80,14 +90,6 @@ public Employee(long id, String name, Integer salary, int experience, String add
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getSalary() {
-		return salary;
-	}
-
-	public void setSalary(Integer salary) {
-		this.salary = salary;
 	}
 
 	public int getExperience() {
@@ -144,14 +146,6 @@ public Employee(long id, String name, Integer salary, int experience, String add
 
 	public void setBlood_group(String blood_group) {
 		this.bloodGroup = blood_group;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public Date getDateOfJoin() {

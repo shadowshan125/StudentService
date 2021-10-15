@@ -1,8 +1,11 @@
-package com.example.demo;
+package com.example.demo.Service;
 
-import com.example.demo.Employee;
+
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.UUID;
+
+import com.example.demo.Definitions.Employee;
 
 @Component
 public interface EmployeeService {
@@ -15,4 +18,5 @@ public interface EmployeeService {
     Employee Update(Employee params, long id);
 
     String Delete(long id);
+
 }
